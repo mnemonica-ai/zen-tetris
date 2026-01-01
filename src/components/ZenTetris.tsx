@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Piece, PieceType, SandParticle } from '@/types/game';
 import {
   COLS, ROWS, BLOCK_SIZE, PREVIEW_BLOCK_SIZE, DROP_INTERVAL,
@@ -9,6 +9,8 @@ import {
 import { playTibetanBowl, playSoftChime } from '@/lib/audio';
 import { saveHighScore } from '@/lib/storage';
 import { useLanguage } from '@/context/LanguageContext';
+import { useTouchControls } from '@/hooks/useTouchControls';
+import MobileControls from './MobileControls';
 
 const PLAYER_NAME_KEY = 'zenTetrisPlayerName';
 import StartScreen from './StartScreen';
@@ -31,6 +33,7 @@ export default function ZenTetris() {
   const [zenQuote, setZenQuote] = useState('');
   const [linesSinceExercise, setLinesSinceExercise] = useState(0);
   const [zenMessage, setZenMessage] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
   const [, forceUpdate] = useState(0);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -658,6 +661,130 @@ export default function ZenTetris() {
     gameContainerRef.current?.focus();
   };
 
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Mobile control handlers
+  const handleMoveLeft = useCallback(() => {
+    const game = gameRef.current;
+    const piece = game.currentPiece;
+    if (!piece || game.isPaused || game.gameOver || game.showExercise) return;
+    if (!checkCollision(piece, -1, 0)) {
+      piece.x--;
+      forceUpdate(n => n + 1);
+    }
+  }, []);
+
+  const handleMoveRight = useCallback(() => {
+    const game = gameRef.current;
+    const piece = game.currentPiece;
+    if (!piece || game.isPaused || game.gameOver || game.showExercise) return;
+    if (!checkCollision(piece, 1, 0)) {
+      piece.x++;
+      forceUpdate(n => n + 1);
+    }
+  }, []);
+
+  const handleMoveDown = useCallback(() => {
+    const game = gameRef.current;
+    const piece = game.currentPiece;
+    if (!piece || game.isPaused || game.gameOver || game.showExercise) return;
+    if (!checkCollision(piece, 0, 1)) {
+      piece.y++;
+      game.score++;
+      setScore(game.score);
+      forceUpdate(n => n + 1);
+    }
+  }, []);
+
+  const handleRotate = useCallback(() => {
+    const game = gameRef.current;
+    const piece = game.currentPiece;
+    if (!piece || game.isPaused || game.gameOver || game.showExercise) return;
+    
+    const shape = piece.shape;
+    const n = shape.length;
+    const rotated: number[][] = [];
+    for (let i = 0; i < n; i++) {
+      rotated[i] = [];
+      for (let j = 0; j < n; j++) {
+        rotated[i][j] = shape[n - 1 - j][i];
+      }
+    }
+    const kicks = [0, -1, 1, -2, 2];
+    for (const kick of kicks) {
+      if (!checkCollision(piece, kick, 0, rotated)) {
+        piece.shape = rotated;
+        piece.x += kick;
+        forceUpdate(n => n + 1);
+        break;
+      }
+    }
+  }, []);
+
+  const handleHardDrop = useCallback(() => {
+    const game = gameRef.current;
+    const piece = game.currentPiece;
+    if (!piece || game.isPaused || game.gameOver || game.showExercise) return;
+    
+    let dropDistance = 0;
+    while (!checkCollision(piece, 0, 1)) {
+      piece.y++;
+      dropDistance++;
+    }
+    game.score += dropDistance * 2;
+    setScore(game.score);
+    lockPiece();
+  }, []);
+
+  const handleHold = useCallback(() => {
+    const game = gameRef.current;
+    const piece = game.currentPiece;
+    if (!piece || game.isPaused || game.gameOver || game.showExercise || !game.canHold) return;
+    
+    game.canHold = false;
+    if (!game.holdPiece) {
+      game.holdPiece = { type: piece.type };
+      spawnPiece();
+    } else {
+      const tempType = game.holdPiece.type;
+      game.holdPiece = { type: piece.type };
+      game.currentPiece = createPiece(tempType);
+    }
+    const holdCtx = holdCanvasRef.current?.getContext('2d');
+    if (holdCtx) drawPreviewPiece(holdCtx, game.holdPiece.type);
+    forceUpdate(n => n + 1);
+  }, []);
+
+  const handlePauseToggle = useCallback(() => {
+    const game = gameRef.current;
+    if (game.gameOver) return;
+    
+    game.isPaused = !game.isPaused;
+    setIsPaused(game.isPaused);
+    if (!game.isPaused) {
+      game.lastDropTime = performance.now();
+      requestAnimationFrame(gameLoop);
+    }
+  }, []);
+
+  // Touch controls hook
+  useTouchControls(canvasRef, {
+    onMoveLeft: handleMoveLeft,
+    onMoveRight: handleMoveRight,
+    onMoveDown: handleMoveDown,
+    onRotate: handleRotate,
+    onHardDrop: handleHardDrop,
+    enabled: gameStarted && !isPaused && !gameOver && !showExercise,
+  });
+
   // Input handling
   useEffect(() => {
     if (!gameStarted) return;
@@ -781,7 +908,7 @@ export default function ZenTetris() {
       ref={gameContainerRef}
       tabIndex={0}
       onClick={() => !isEditingName && gameContainerRef.current?.focus()}
-      className="min-h-screen bg-gradient-to-b from-[#1a1510] via-[#2d2418] to-[#1a1510] flex justify-center items-center outline-none"
+      className="min-h-screen bg-gradient-to-b from-[#1a1510] via-[#2d2418] to-[#1a1510] flex justify-center items-center outline-none p-2 md:p-4"
     >
       {showExercise && (
         <MindfulnessOverlay
@@ -791,9 +918,32 @@ export default function ZenTetris() {
         />
       )}
 
-      <div className="flex gap-5 p-5 bg-[#2d2418]/50 border border-[#c9a86c]/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
-        {/* Left Panel */}
-        <div className="w-40 flex flex-col gap-5">
+      <div className="flex flex-col md:flex-row gap-3 md:gap-5 p-3 md:p-5 bg-[#2d2418]/50 border border-[#c9a86c]/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)] max-w-full">
+        
+        {/* Mobile Top Bar */}
+        <div className="flex md:hidden justify-between items-center gap-2 w-full">
+          {/* Hold piece - compact */}
+          <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex items-center gap-2">
+            <canvas ref={holdCanvasRef} width={60} height={60} className="block bg-[#1a1510]/80 border border-[#c9a86c]/10 w-[50px] h-[50px]" />
+          </div>
+          
+          {/* Score/Level - compact */}
+          <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex-1 text-center">
+            <div className="flex justify-center gap-4 text-sm">
+              <span className="text-[#c9a86c]">{score}</span>
+              <span className="text-[#6b5d4d]">|</span>
+              <span className="text-[#8b7355]">L{level}</span>
+            </div>
+          </div>
+          
+          {/* Next piece - compact */}
+          <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex items-center gap-2">
+            <canvas ref={nextCanvasRef} width={60} height={60} className="block bg-[#1a1510]/80 border border-[#c9a86c]/10 w-[50px] h-[50px]" />
+          </div>
+        </div>
+
+        {/* Desktop Left Panel */}
+        <div className="hidden md:flex w-40 flex-col gap-5">
           {/* Player Name */}
           <div className="bg-[#1a1510]/60 p-3 border border-[#c9a86c]/15 text-center group">
             {isEditingName ? (
@@ -849,12 +999,13 @@ export default function ZenTetris() {
         </div>
 
         {/* Game Board */}
-        <div className="relative">
+        <div className="relative mx-auto md:mx-0">
           <canvas
             ref={canvasRef}
             width={300}
             height={600}
-            className="block bg-gradient-to-b from-[#1a1510]/90 to-[#2d2418]/90 border-2 border-[#c9a86c]/30 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)]"
+            className="block bg-gradient-to-b from-[#1a1510]/90 to-[#2d2418]/90 border-2 border-[#c9a86c]/30 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] max-h-[60vh] md:max-h-none w-auto"
+            style={{ aspectRatio: '1/2' }}
           />
 
           {gameOver && (
@@ -880,8 +1031,8 @@ export default function ZenTetris() {
           )}
         </div>
 
-        {/* Right Panel */}
-        <div className="w-40 flex flex-col gap-5">
+        {/* Desktop Right Panel */}
+        <div className="hidden md:flex w-40 flex-col gap-5">
           <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15">
             <h3 className="text-center text-xs tracking-[3px] mb-2 text-[#8b7355] font-normal">{t.game.next}</h3>
             <canvas ref={nextCanvasRef} width={100} height={100} className="block mx-auto bg-[#1a1510]/80 border border-[#c9a86c]/10" />
@@ -918,6 +1069,20 @@ export default function ZenTetris() {
         onOpen={handleMenuOpen}
         onClose={handleMenuClose}
       />
+
+      {/* Mobile Controls */}
+      {isMobile && (
+        <MobileControls
+          onMoveLeft={handleMoveLeft}
+          onMoveRight={handleMoveRight}
+          onMoveDown={handleMoveDown}
+          onRotate={handleRotate}
+          onHardDrop={handleHardDrop}
+          onHold={handleHold}
+          onPause={handlePauseToggle}
+          isPaused={isPaused}
+        />
+      )}
     </div>
   );
 }
