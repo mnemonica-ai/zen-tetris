@@ -506,22 +506,64 @@ export default function ZenTetris() {
       trackLinesCleared(toClear.length, newLines, newLevel);
 
       animateSandClear(() => {
-        if (newLinesSinceExercise >= LINES_BETWEEN_EXERCISES) {
-          game.linesSinceExercise = 0;
-          game.showExercise = true;
-          setLinesSinceExercise(0);
-          setShowExercise(true);
-          trackMindfulnessStart(exerciseIndex);
-        } else {
-          spawnPiece();
-          game.lastDropTime = performance.now();
-          requestAnimationFrame(gameLoop);
-        }
+        // Check for chain clears - lines that became complete after blocks fell
+        checkAndClearLines();
       });
     } else {
       spawnPiece();
       game.lastDropTime = performance.now();
       requestAnimationFrame(gameLoop);
+    }
+  };
+
+  // Check for complete lines and clear them (handles chain reactions)
+  const checkAndClearLines = () => {
+    const game = gameRef.current;
+    
+    const toClear: number[] = [];
+    for (let row = ROWS - 1; row >= 0; row--) {
+      if (game.board[row] && game.board[row].every(cell => cell !== 0)) {
+        toClear.push(row);
+      }
+    }
+
+    if (toClear.length > 0) {
+      // More lines to clear!
+      game.linesToClear = toClear;
+      const points = [0, 100, 300, 500, 800];
+      const newScore = game.score + points[toClear.length] * game.level;
+      const newLines = game.lines + toClear.length;
+      const newLevel = Math.floor(newLines / 10) + 1;
+      const newLinesSinceExercise = game.linesSinceExercise + toClear.length;
+
+      game.score = newScore;
+      game.lines = newLines;
+      game.level = newLevel;
+      game.linesSinceExercise = newLinesSinceExercise;
+
+      setScore(newScore);
+      setLines(newLines);
+      setLevel(newLevel);
+      setLinesSinceExercise(newLinesSinceExercise);
+      trackLinesCleared(toClear.length, newLines, newLevel);
+
+      // Animate and check again (recursive chain clearing)
+      animateSandClear(() => {
+        checkAndClearLines();
+      });
+    } else {
+      // No more lines to clear, proceed with game
+      if (game.linesSinceExercise >= LINES_BETWEEN_EXERCISES) {
+        game.linesSinceExercise = 0;
+        game.showExercise = true;
+        setLinesSinceExercise(0);
+        setShowExercise(true);
+        trackMindfulnessStart(exerciseIndex);
+      } else {
+        spawnPiece();
+        game.lastDropTime = performance.now();
+        requestAnimationFrame(gameLoop);
+      }
     }
   };
 
