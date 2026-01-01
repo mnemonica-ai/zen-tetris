@@ -1015,7 +1015,7 @@ export default function ZenTetris() {
             ref={canvasRef}
             width={300}
             height={600}
-            className="block bg-gradient-to-b from-[#1a1510]/90 to-[#2d2418]/90 border-2 border-[#c9a86c]/30 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] max-h-[50vh] md:max-h-none w-auto"
+            className="block bg-gradient-to-b from-[#1a1510]/90 to-[#2d2418]/90 border-2 border-[#c9a86c]/30 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] max-h-[50vh] md:max-h-none w-auto touch-none"
             style={{ aspectRatio: '1/2' }}
           />
 
