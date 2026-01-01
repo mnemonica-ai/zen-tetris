@@ -1,0 +1,16 @@
+# Zen Tetris - Robots.txt
+# https://zen-tetris.vercel.app
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://zen-tetris.vercel.app/sitemap.xml
+
+# Crawl-delay for politeness
+Crawl-delay: 1
+
+# Block common non-content paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/

@@ -1,0 +1,36 @@
+{
+  "name": "Zen Tetris - Mindful Puzzle Game",
+  "short_name": "Zen Tetris",
+  "description": "A calming puzzle game that combines classic Tetris gameplay with mindfulness breathing exercises. Find peace while you play.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1510",
+  "theme_color": "#c9a86c",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["games", "entertainment", "health"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-game.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "label": "Zen Tetris gameplay"
+    }
+  ],
+  "prefer_related_applications": false
+}
