@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
-import KofiWidget from "@/components/KofiWidget";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zen-tetris.vercel.app";
 
@@ -156,7 +155,6 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
-        <KofiWidget />
       </body>
     </html>
   );
