@@ -9,6 +9,15 @@ import {
 import { playTibetanBowl, playSoftChime } from '@/lib/audio';
 import { saveHighScore } from '@/lib/storage';
 import { useLanguage } from '@/context/LanguageContext';
+import { 
+  trackGameOver, 
+  trackLinesCleared, 
+  trackPlayerNameChange, 
+  trackMindfulnessStart, 
+  trackMindfulnessComplete,
+  trackHoldPiece,
+  trackPauseGame 
+} from '@/lib/analytics';
 import { useTouchControls } from '@/hooks/useTouchControls';
 import MobileControls from './MobileControls';
 
@@ -494,6 +503,7 @@ export default function ZenTetris() {
       setLines(newLines);
       setLevel(newLevel);
       setLinesSinceExercise(newLinesSinceExercise);
+      trackLinesCleared(toClear.length, newLines, newLevel);
 
       animateSandClear(() => {
         if (newLinesSinceExercise >= LINES_BETWEEN_EXERCISES) {
@@ -501,6 +511,7 @@ export default function ZenTetris() {
           game.showExercise = true;
           setLinesSinceExercise(0);
           setShowExercise(true);
+          trackMindfulnessStart(exerciseIndex);
         } else {
           spawnPiece();
           game.lastDropTime = performance.now();
@@ -560,6 +571,7 @@ export default function ZenTetris() {
     setZenMessage(interpolate(messageTemplate, { name: playerName }));
 
     saveHighScore({ name: playerName, score: game.score, level: game.level, lines: game.lines });
+    trackGameOver(game.score, game.level, game.lines, playerName);
   };
 
   const resetGame = () => {
@@ -613,6 +625,7 @@ export default function ZenTetris() {
     const game = gameRef.current;
     game.showExercise = false;
     setShowExercise(false);
+    trackMindfulnessComplete(exerciseIndex);
     setExerciseIndex(prev => prev + 1);
     spawnPiece();
     game.lastDropTime = performance.now();
@@ -640,7 +653,8 @@ export default function ZenTetris() {
 
   const handleNameSave = () => {
     const trimmedName = editedName.trim();
-    if (trimmedName) {
+    if (trimmedName && trimmedName !== playerName) {
+      trackPlayerNameChange(playerName, trimmedName);
       setPlayerName(trimmedName);
       localStorage.setItem(PLAYER_NAME_KEY, trimmedName);
     }
@@ -757,12 +771,13 @@ export default function ZenTetris() {
     lockPiece();
   }, []);
 
-  const handleHold = useCallback(() => {
+const handleHold = useCallback(() => {
     const game = gameRef.current;
     const piece = game.currentPiece;
     if (!piece || game.isPaused || game.gameOver || game.showExercise || !game.canHold) return;
-    
+
     game.canHold = false;
+    trackHoldPiece();
     if (!game.holdPiece) {
       game.holdPiece = { type: piece.type };
       spawnPiece();
@@ -775,12 +790,13 @@ export default function ZenTetris() {
     forceUpdate(n => n + 1);
   }, []);
 
-  const handlePauseToggle = useCallback(() => {
+const handlePauseToggle = useCallback(() => {
     const game = gameRef.current;
     if (game.gameOver) return;
-    
+
     game.isPaused = !game.isPaused;
     setIsPaused(game.isPaused);
+    trackPauseGame(game.isPaused);
     if (!game.isPaused) {
       game.lastDropTime = performance.now();
       requestAnimationFrame(gameLoop);

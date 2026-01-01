@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import LanguageSelector from './LanguageSelector';
+import { trackPlayerNameSet, trackGameStart } from '@/lib/analytics';
 
 const PLAYER_NAME_KEY = 'zenTetrisPlayerName';
 
@@ -15,19 +16,28 @@ export default function StartScreen({ onStart }: StartScreenProps) {
   const [name, setName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [hasSavedName, setHasSavedName] = useState(false);
+  const originalNameRef = useRef<string | null>(null);
 
   useEffect(() => {
     const savedName = localStorage.getItem(PLAYER_NAME_KEY);
     if (savedName) {
       setName(savedName);
       setHasSavedName(true);
+      originalNameRef.current = savedName;
     }
   }, []);
 
   const handleStart = () => {
     if (!name.trim()) return;
-    localStorage.setItem(PLAYER_NAME_KEY, name.trim());
-    onStart(name.trim());
+    const trimmedName = name.trim();
+    const isNewPlayer = !originalNameRef.current;
+    
+    // Track player name
+    trackPlayerNameSet(trimmedName, isNewPlayer);
+    trackGameStart(trimmedName);
+    
+    localStorage.setItem(PLAYER_NAME_KEY, trimmedName);
+    onStart(trimmedName);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

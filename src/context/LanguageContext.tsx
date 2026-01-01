@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Language, Translations, getTranslation, defaultLanguage, interpolate } from '@/lib/i18n';
+import { trackLanguageChange } from '@/lib/analytics';
 
 const LANGUAGE_STORAGE_KEY = 'zenTetrisLanguage';
 
@@ -37,6 +38,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+    trackLanguageChange(lang);
   };
 
   const t = getTranslation(language);
