@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import BuyMeCoffeeWidget from "@/components/BuyMeCoffeeWidget";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zen-tetris.vercel.app";
 
@@ -153,6 +154,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="antialiased">
+        <GoogleAnalytics />
         <Providers>
           {children}
         </Providers>
