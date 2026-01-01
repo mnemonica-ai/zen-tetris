@@ -1,11 +1,11 @@
 # Zen Tetris - Robots.txt
-# https://zen-tetris.vercel.app
+# https://zentetris.com
 
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://zen-tetris.vercel.app/sitemap.xml
+Sitemap: https://zentetris.com/sitemap.xml
 
 # Crawl-delay for politeness
 Crawl-delay: 1

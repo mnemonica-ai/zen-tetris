@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
-import BuyMeCoffeeWidget from "@/components/BuyMeCoffeeWidget";
+import SupportWidget from "@/components/SupportWidget";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zen-tetris.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zentetris.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -158,7 +158,7 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
-        <BuyMeCoffeeWidget />
+        <SupportWidget />
       </body>
     </html>
   );
