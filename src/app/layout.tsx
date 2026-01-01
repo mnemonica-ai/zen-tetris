@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import BuyMeCoffeeWidget from "@/components/BuyMeCoffeeWidget";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zen-tetris.vercel.app";
 
@@ -155,6 +156,7 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
+        <BuyMeCoffeeWidget />
       </body>
     </html>
   );
