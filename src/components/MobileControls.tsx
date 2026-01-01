@@ -26,12 +26,12 @@ export default function MobileControls({
   const { t } = useLanguage();
 
   const buttonBase = "active:scale-95 transition-transform touch-manipulation select-none";
-  const buttonStyle = `${buttonBase} w-14 h-14 rounded-full bg-[#2d2418]/80 border border-[#c9a86c]/30 flex items-center justify-center text-[#c9a86c]`;
-  const smallButtonStyle = `${buttonBase} w-10 h-10 rounded-full bg-[#2d2418]/60 border border-[#c9a86c]/20 flex items-center justify-center text-[#c9a86c]/80 text-xs`;
+  const buttonStyle = `${buttonBase} w-12 h-12 rounded-full bg-[#2d2418]/80 border border-[#c9a86c]/30 flex items-center justify-center text-[#c9a86c]`;
+  const smallButtonStyle = `${buttonBase} w-9 h-9 rounded-full bg-[#2d2418]/60 border border-[#c9a86c]/20 flex items-center justify-center text-[#c9a86c]/80 text-xs`;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#1a1510] to-transparent pointer-events-none md:hidden">
-      <div className="flex justify-between items-end max-w-md mx-auto pointer-events-auto">
+    <div className="fixed bottom-0 left-0 right-0 p-3 pb-4 bg-gradient-to-t from-[#1a1510] via-[#1a1510]/95 to-transparent pointer-events-none md:hidden">
+      <div className="flex justify-between items-end max-w-sm mx-auto pointer-events-auto">
         {/* Left side - Movement */}
         <div className="flex flex-col gap-2">
           {/* Rotate button */}

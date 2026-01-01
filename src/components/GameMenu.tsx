@@ -32,7 +32,7 @@ export default function GameMenu({ playerName, onOpen, onClose }: GameMenuProps)
       {/* Hamburger Button */}
       <button
         onClick={handleOpen}
-        className="fixed bottom-4 right-4 z-40 w-12 h-12 bg-[#2d2418]/80 border border-[#c9a86c]/30 rounded-full flex flex-col items-center justify-center gap-1.5 hover:bg-[#2d2418] hover:border-[#c9a86c]/60 transition-all group"
+        className="fixed top-4 left-4 z-40 w-12 h-12 bg-[#2d2418]/80 border border-[#c9a86c]/30 rounded-full flex flex-col items-center justify-center gap-1.5 hover:bg-[#2d2418] hover:border-[#c9a86c]/60 transition-all group"
         aria-label="Open menu"
       >
         <span className="w-5 h-0.5 bg-[#c9a86c] rounded transition-transform group-hover:scale-110" />

@@ -39,6 +39,8 @@ export default function ZenTetris() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const nextCanvasRef = useRef<HTMLCanvasElement>(null);
   const holdCanvasRef = useRef<HTMLCanvasElement>(null);
+  const nextCanvasMobileRef = useRef<HTMLCanvasElement>(null);
+  const holdCanvasMobileRef = useRef<HTMLCanvasElement>(null);
   const isEditingNameRef = useRef(false);
   const isMenuOpenRef = useRef(false);
   const gameContainerRef = useRef<HTMLDivElement>(null);
@@ -201,24 +203,38 @@ export default function ZenTetris() {
     }
   };
 
-  const drawPreviewPiece = (ctx: CanvasRenderingContext2D, type: PieceType | null) => {
+  const drawPreviewPiece = (ctx: CanvasRenderingContext2D, type: PieceType | null, blockSize: number = PREVIEW_BLOCK_SIZE) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     if (!type) return;
 
     const shape = SHAPES[type];
     const color = COLORS[type];
-    const pieceWidth = shape[0].length * PREVIEW_BLOCK_SIZE;
-    const pieceHeight = shape.length * PREVIEW_BLOCK_SIZE;
+    const pieceWidth = shape[0].length * blockSize;
+    const pieceHeight = shape.length * blockSize;
     const offsetX = (ctx.canvas.width - pieceWidth) / 2;
     const offsetY = (ctx.canvas.height - pieceHeight) / 2;
 
     for (let row = 0; row < shape.length; row++) {
       for (let col = 0; col < shape[row].length; col++) {
         if (shape[row][col]) {
-          drawBlock(ctx, offsetX + col * PREVIEW_BLOCK_SIZE, offsetY + row * PREVIEW_BLOCK_SIZE, color, PREVIEW_BLOCK_SIZE);
+          drawBlock(ctx, offsetX + col * blockSize, offsetY + row * blockSize, color, blockSize);
         }
       }
     }
+  };
+
+  const drawHoldPiece = (type: PieceType | null) => {
+    const ctx = holdCanvasRef.current?.getContext('2d');
+    const ctxMobile = holdCanvasMobileRef.current?.getContext('2d');
+    if (ctx) drawPreviewPiece(ctx, type);
+    if (ctxMobile) drawPreviewPiece(ctxMobile, type, 15);
+  };
+
+  const drawNextPiece = (type: PieceType | null) => {
+    const ctx = nextCanvasRef.current?.getContext('2d');
+    const ctxMobile = nextCanvasMobileRef.current?.getContext('2d');
+    if (ctx) drawPreviewPiece(ctx, type);
+    if (ctxMobile) drawPreviewPiece(ctxMobile, type, 15);
   };
 
   const spawnPiece = () => {
@@ -237,10 +253,7 @@ export default function ZenTetris() {
       return;
     }
 
-    const nextCtx = nextCanvasRef.current?.getContext('2d');
-    if (nextCtx) {
-      drawPreviewPiece(nextCtx, game.nextPiece.type);
-    }
+    drawNextPiece(game.nextPiece.type);
   };
 
   const createSandParticles = (row: number, delayOffset: number = 0): SandParticle[] => {
@@ -758,8 +771,7 @@ export default function ZenTetris() {
       game.holdPiece = { type: piece.type };
       game.currentPiece = createPiece(tempType);
     }
-    const holdCtx = holdCanvasRef.current?.getContext('2d');
-    if (holdCtx) drawPreviewPiece(holdCtx, game.holdPiece.type);
+    drawHoldPiece(game.holdPiece.type);
     forceUpdate(n => n + 1);
   }, []);
 
@@ -874,8 +886,7 @@ export default function ZenTetris() {
               game.holdPiece = { type: piece.type };
               game.currentPiece = createPiece(tempType);
             }
-            const holdCtx = holdCanvasRef.current?.getContext('2d');
-            if (holdCtx) drawPreviewPiece(holdCtx, game.holdPiece.type);
+            drawHoldPiece(game.holdPiece.type);
             forceUpdate(n => n + 1);
           }
           break;
@@ -908,7 +919,7 @@ export default function ZenTetris() {
       ref={gameContainerRef}
       tabIndex={0}
       onClick={() => !isEditingName && gameContainerRef.current?.focus()}
-      className="min-h-screen bg-gradient-to-b from-[#1a1510] via-[#2d2418] to-[#1a1510] flex justify-center items-center outline-none p-2 md:p-4"
+      className="min-h-screen bg-gradient-to-b from-[#1a1510] via-[#2d2418] to-[#1a1510] flex justify-center items-start md:items-center outline-none p-2 pt-20 pb-48 md:pb-4 md:pt-4"
     >
       {showExercise && (
         <MindfulnessOverlay
@@ -924,7 +935,7 @@ export default function ZenTetris() {
         <div className="flex md:hidden justify-between items-center gap-2 w-full">
           {/* Hold piece - compact */}
           <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex items-center gap-2">
-            <canvas ref={holdCanvasRef} width={60} height={60} className="block bg-[#1a1510]/80 border border-[#c9a86c]/10 w-[50px] h-[50px]" />
+            <canvas ref={holdCanvasMobileRef} width={60} height={60} className="block bg-[#1a1510]/80 border border-[#c9a86c]/10 w-[50px] h-[50px]" />
           </div>
           
           {/* Score/Level - compact */}
@@ -938,7 +949,7 @@ export default function ZenTetris() {
           
           {/* Next piece - compact */}
           <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex items-center gap-2">
-            <canvas ref={nextCanvasRef} width={60} height={60} className="block bg-[#1a1510]/80 border border-[#c9a86c]/10 w-[50px] h-[50px]" />
+            <canvas ref={nextCanvasMobileRef} width={60} height={60} className="block bg-[#1a1510]/80 border border-[#c9a86c]/10 w-[50px] h-[50px]" />
           </div>
         </div>
 
@@ -1004,7 +1015,7 @@ export default function ZenTetris() {
             ref={canvasRef}
             width={300}
             height={600}
-            className="block bg-gradient-to-b from-[#1a1510]/90 to-[#2d2418]/90 border-2 border-[#c9a86c]/30 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] max-h-[60vh] md:max-h-none w-auto"
+            className="block bg-gradient-to-b from-[#1a1510]/90 to-[#2d2418]/90 border-2 border-[#c9a86c]/30 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] max-h-[50vh] md:max-h-none w-auto"
             style={{ aspectRatio: '1/2' }}
           />
 
