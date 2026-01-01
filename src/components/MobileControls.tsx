@@ -75,7 +75,7 @@ export default function MobileControls({
             className={smallButtonStyle}
             aria-label="Hold"
           >
-            H
+            C
           </button>
           <button
             onClick={onPause}
