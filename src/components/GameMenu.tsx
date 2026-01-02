@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { languages, Language } from '@/lib/i18n';
+import AdBanner from './AdBanner';
 
 interface GameMenuProps {
   playerName: string;
@@ -11,9 +11,8 @@ interface GameMenuProps {
 }
 
 export default function GameMenu({ playerName, onOpen, onClose }: GameMenuProps) {
-  const { t, interpolate, language, setLanguage } = useLanguage();
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -24,8 +23,6 @@ export default function GameMenu({ playerName, onOpen, onClose }: GameMenuProps)
     setIsOpen(false);
     onClose?.();
   };
-
-  const currentLang = languages.find(l => l.code === language);
 
   return (
     <>
@@ -60,11 +57,6 @@ export default function GameMenu({ playerName, onOpen, onClose }: GameMenuProps)
               <div className="w-1.5 h-1.5 bg-[#c9a86c] rounded-full" />
             </div>
 
-            {/* Welcome */}
-            <h2 className="text-2xl text-[#c9a86c] text-center mb-8 font-light tracking-wide">
-              {interpolate(t.menu.welcome, { name: playerName })}
-            </h2>
-
             {/* About Section */}
             <div className="mb-8">
               <h3 className="text-lg text-[#c9a86c] mb-4 text-center tracking-wider">
@@ -82,62 +74,11 @@ export default function GameMenu({ playerName, onOpen, onClose }: GameMenuProps)
             {/* Divider */}
             <div className="w-16 h-px bg-[#c9a86c]/30 mx-auto my-8" />
 
-            {/* Language Section */}
+            {/* Ad Banner */}
             <div className="mb-6">
-              <div className="flex justify-center">
-                <div className="relative">
-                  <button
-                    onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                    className="flex items-center gap-3 px-4 py-2 border border-[#c9a86c]/30 bg-[#1a1510]/60 text-[#c9a86c] hover:border-[#c9a86c]/60 transition-colors min-w-[160px] justify-between"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="text-lg">{currentLang?.flag}</span>
-                      <span className="text-sm">{currentLang?.name}</span>
-                    </span>
-                    <svg
-                      className={`w-4 h-4 transition-transform ${isLangDropdownOpen ? 'rotate-180' : ''}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {isLangDropdownOpen && (
-                    <>
-                      <div
-                        className="fixed inset-0 z-40"
-                        onClick={() => setIsLangDropdownOpen(false)}
-                      />
-                      <div className="absolute left-0 right-0 mt-1 py-1 bg-[#2d2418] border border-[#c9a86c]/30 shadow-lg z-50">
-                        {languages.map((lang) => (
-                          <button
-                            key={lang.code}
-                            onClick={() => {
-                              setLanguage(lang.code as Language);
-                              setIsLangDropdownOpen(false);
-                            }}
-                            className={`w-full px-4 py-2 text-left text-sm flex items-center gap-3 hover:bg-[#c9a86c]/10 transition-colors
-                              ${language === lang.code ? 'text-[#c9a86c]' : 'text-[#8b7355]'}`}
-                          >
-                            <span className="text-lg">{lang.flag}</span>
-                            <span>{lang.name}</span>
-                            {language === lang.code && (
-                              <svg className="w-4 h-4 ml-auto" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                              </svg>
-                            )}
-                          </button>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
+              <AdBanner slot="9677897006" format="rectangle" />
             </div>
-
-                      </div>
+          </div>
         </div>
       )}
     </>

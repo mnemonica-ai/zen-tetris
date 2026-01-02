@@ -5,6 +5,7 @@ import SupportWidget from "@/components/SupportWidget";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import GoogleAdsense from "@/components/GoogleAdsense";
 import CookieConsent from "@/components/CookieConsent";
+import FloatingLanguageSelector from "@/components/FloatingLanguageSelector";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zentetris.com";
 
@@ -161,6 +162,7 @@ export default function RootLayout({
         <GoogleAdsense />
         <Providers>
           {children}
+          <FloatingLanguageSelector />
           <CookieConsent />
         </Providers>
         <SupportWidget />

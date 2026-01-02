@@ -82,10 +82,7 @@ export const pt: Translations = {
     welcome: "Bem-vindo, {name}",
     aboutTitle: "Sobre Zen Tetris",
     aboutText: [
-      "Zen Tetris nasceu de uma ideia simples: e se um jogo clássico pudesse se tornar uma ferramenta para a atenção plena?",
-      "Em um mundo cheio de distrações, frequentemente esquecemos de pausar e respirar. Este jogo convida você a fazer exatamente isso—a cada poucas linhas, o jogo pausa para um breve exercício de respiração.",
-      "A estética visual é inspirada em tons de areia e terra, evocando a calma de um jardim zen. As peças que caem são como grãos de areia, e quando as linhas são completadas, elas se dissolvem como areia ao vento.",
-      "Jogue não para ganhar, mas para encontrar um momento de paz."
+      "Zen Tetris transforma um jogo clássico em uma ferramenta de mindfulness. A cada poucas linhas, o jogo pausa para um exercício de respiração, convidando você a parar e se reconectar. Com visuais inspirados em areia e peças que se dissolvem como grãos ao vento, jogue não para ganhar—mas para encontrar um momento de paz."
     ],
     languageTitle: "Idioma",
     close: "Fechar",
