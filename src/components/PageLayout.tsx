@@ -60,7 +60,7 @@ export default function PageLayout({ children }: PageLayoutProps) {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a1510] via-[#2d2418] to-[#1a1510] text-[#d4c4a8]">
+    <div className="min-h-screen bg-gradient-to-b from-[#1a1510] via-[#2d2418] to-[#1a1510] text-[#d4c4a8] overflow-y-auto">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1a1510]/90 backdrop-blur-sm border-b border-[#c9a86c]/20">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">

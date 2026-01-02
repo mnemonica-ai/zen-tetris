@@ -61,9 +61,9 @@ export default function StartScreen({ onStart }: StartScreenProps) {
         <LanguageSelector />
       </div>
 
-      <div className="text-center animate-float-in">
+      <div className="text-center animate-float-in pt-16">
         {/* Zen Circle */}
-        <div className="w-[120px] h-[120px] border-[3px] border-[#c9a86c] rounded-full mx-auto mb-8 relative animate-breathe">
+        <div className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] border-[3px] border-[#c9a86c] rounded-full mx-auto mb-6 md:mb-8 relative animate-breathe">
           <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-[#c9a86c] rounded-full -translate-x-1/2 -translate-y-1/2" />
         </div>
 
