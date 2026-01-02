@@ -1097,15 +1097,15 @@ export default function ZenTetris() {
                 <p className="text-base mb-4 text-[#8b7355]">{t.game.gameOverScore}: {score}</p>
                 <p className="italic max-w-[250px] text-center leading-relaxed my-5 text-[#8b7355]">{zenMessage}</p>
 
-                {/* Leaderboard */}
+                {/* Personal Best Top 5 */}
                 {highScores.length > 0 && (
                   <div className="w-full max-w-[280px] mb-4 bg-[#1a1510]/50 border border-[#c9a86c]/20 p-4 rounded-sm">
-                    <h3 className="text-[#c9a86c] text-sm tracking-[2px] mb-3 text-center border-b border-[#c9a86c]/20 pb-2 uppercase text-xs">Top Zen Masters</h3>
+                    <h3 className="text-[#c9a86c] text-sm tracking-[2px] mb-3 text-center border-b border-[#c9a86c]/20 pb-2 uppercase text-xs">Personal Best</h3>
                     <div className="flex flex-col gap-2">
                       {highScores.map((entry, index) => (
-                        <div key={`${entry.name}-${index}`} className={`flex justify-between text-xs ${entry.name === playerName && entry.score === score ? 'text-[#e8d5b0] font-bold bg-[#c9a86c]/10 -mx-2 px-2 py-1 rounded' : 'text-[#8b7355]'}`}>
-                          <span className="truncate max-w-[120px]">{index + 1}. {entry.name}</span>
-                          <span>{entry.score}</span>
+                        <div key={`${index}-${entry.score}`} className={`flex justify-between text-xs ${entry.score === score && index === highScores.findIndex(h => h.score === score) ? 'text-[#e8d5b0] font-bold bg-[#c9a86c]/10 -mx-2 px-2 py-1 rounded' : 'text-[#8b7355]'}`}>
+                          <span className="w-8">{index + 1}.</span>
+                          <span className="flex-1 text-right">{entry.score}</span>
                         </div>
                       ))}
                     </div>
