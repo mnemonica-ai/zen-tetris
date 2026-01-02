@@ -30,6 +30,18 @@ const translations = {
     decline: 'Recusar',
     learnMore: 'Saiba Mais',
   },
+  de: {
+    message: 'Wir verwenden Cookies und ähnliche Technologien, um Ihre Erfahrung zu verbessern, den Verkehr zu analysieren und personalisierte Werbung anzuzeigen.',
+    accept: 'Alle Akzeptieren',
+    decline: 'Ablehnen',
+    learnMore: 'Mehr Erfahren',
+  },
+  it: {
+    message: 'Utilizziamo cookie e tecnologie simili per migliorare la tua esperienza, analizzare il traffico e mostrare annunci personalizzati.',
+    accept: 'Accetta Tutto',
+    decline: 'Rifiuta',
+    learnMore: 'Saperne di Più',
+  },
 };
 
 export default function CookieConsent() {

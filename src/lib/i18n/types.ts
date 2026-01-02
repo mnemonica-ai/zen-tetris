@@ -1,11 +1,11 @@
 import { MindfulnessExercise } from '@/types/game';
 
-export type Language = 'en' | 'es' | 'fr' | 'pt';
+export type Language = 'en' | 'es' | 'fr' | 'pt' | 'de' | 'it';
 
 export interface Translations {
   // Language info
   languageName: string;
-  
+
   // Start Screen
   startScreen: {
     title: string;
@@ -18,7 +18,7 @@ export interface Translations {
     startButton: string;
     breatheHint: string;
   };
-  
+
   // Game Panel
   game: {
     hold: string;
@@ -32,7 +32,7 @@ export interface Translations {
     linesUnit: string;
     edit: string;
     editNameTitle: string;
-    
+
     // Controls
     controlSlide: string;
     controlRotate: string;
@@ -40,34 +40,34 @@ export interface Translations {
     controlDrop: string;
     controlHold: string;
     controlPause: string;
-    
+
     // Game Over
     gameOverTitle: string;
     gameOverScore: string;
     continueButton: string;
-    
+
     // Pause
     pauseTitle: string;
     pauseMessage: string;
     pauseHint: string;
   };
-  
+
   // Mindfulness
   mindfulness: {
     preparing: string;
     wellDone: string;
     greetings: string[];
   };
-  
+
   // Game Over Messages
   gameOverMessages: string[];
-  
+
   // Zen Quotes
   zenQuotes: string[];
-  
+
   // Mindfulness Exercises
   exercises: MindfulnessExercise[];
-  
+
   // Menu
   menu: {
     welcome: string;

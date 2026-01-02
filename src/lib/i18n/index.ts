@@ -3,6 +3,8 @@ import { en } from './translations/en';
 import { es } from './translations/es';
 import { fr } from './translations/fr';
 import { pt } from './translations/pt';
+import { de } from './translations/de';
+import { it } from './translations/it';
 
 export type { Language, Translations };
 
@@ -11,6 +13,8 @@ export const translations: Record<Language, Translations> = {
   es,
   fr,
   pt,
+  de,
+  it,
 };
 
 export const languages: { code: Language; name: string; flag: string }[] = [
@@ -18,6 +22,8 @@ export const languages: { code: Language; name: string; flag: string }[] = [
   { code: 'es', name: 'Español', flag: '🇪🇸' },
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
   { code: 'pt', name: 'Português', flag: '🇧🇷' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
 ];
 
 export const defaultLanguage: Language = 'en';
