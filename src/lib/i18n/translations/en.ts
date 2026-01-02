@@ -86,6 +86,103 @@ export const en: Translations = {
     ],
     languageTitle: "Language",
     close: "Close",
+    links: {
+      about: "About",
+      howToPlay: "How to Play",
+      benefits: "Benefits",
+      backToGame: "Back to Game",
+    },
+  },
+
+  pages: {
+    about: {
+      title: "About Zen Tetris - Mindful Gaming Experience",
+      metaDescription: "Learn about Zen Tetris, a unique puzzle game that combines classic Tetris gameplay with mindfulness exercises for stress relief and mental wellness.",
+      heading: "About Zen Tetris",
+      sections: {
+        what: {
+          title: "What is Zen Tetris?",
+          content: "Zen Tetris reimagines the classic puzzle game as a tool for mindfulness and relaxation. Instead of chasing high scores under pressure, you play at a constant, peaceful pace. Every few lines, the game pauses for guided breathing exercises, helping you develop a practice of stopping, breathing, and reconnecting with the present moment."
+        },
+        why: {
+          title: "Why Mindful Gaming?",
+          content: "In our always-connected world, finding moments of calm can be challenging. Zen Tetris bridges the gap between entertainment and wellness by transforming screen time into an opportunity for stress relief. The familiar mechanics of Tetris provide just enough engagement to quiet racing thoughts, while the built-in breathing exercises teach valuable relaxation techniques."
+        },
+        how: {
+          title: "How It Works",
+          content: "The game features a soothing earth-tone palette and pieces that dissolve like sand when lines are cleared. There's no speed acceleration—the pace remains gentle throughout. Every 5 lines, you're guided through a breathing exercise like 4-7-8 breathing, box breathing, or body scans. A Tibetan singing bowl marks the beginning of your practice."
+        },
+        who: {
+          title: "Who Is It For?",
+          content: "Zen Tetris is for anyone seeking a mindful break: those dealing with anxiety, people learning meditation, workers needing a mental reset, or anyone who wants to transform gaming into a wellness practice. No experience with meditation is needed—the game guides you through each exercise."
+        }
+      }
+    },
+    howToPlay: {
+      title: "How to Play Zen Tetris - Controls & Guide",
+      metaDescription: "Learn how to play Zen Tetris with our complete guide. Master the controls, understand the mindfulness exercises, and discover tips for a relaxing gaming experience.",
+      heading: "How to Play",
+      intro: "Zen Tetris follows the classic Tetris rules with a mindful twist. Arrange falling pieces to complete horizontal lines, but remember—the goal isn't speed, it's presence.",
+      controls: {
+        title: "Controls",
+        items: [
+          { key: "← →", action: "Move piece left or right" },
+          { key: "↑", action: "Rotate piece" },
+          { key: "↓", action: "Soft drop (move down faster)" },
+          { key: "Space", action: "Hard drop (instant drop)" },
+          { key: "C", action: "Hold piece for later" },
+          { key: "P", action: "Pause the game" }
+        ]
+      },
+      tips: {
+        title: "Tips for a Mindful Experience",
+        items: [
+          "Don't rush—there's no speed increase in Zen Tetris",
+          "Use the ghost piece (transparent preview) to plan your placement",
+          "The Hold feature lets you save a piece for when you need it",
+          "During breathing exercises, actually follow along—they're designed to help",
+          "If you feel stressed, pause the game and take a few breaths",
+          "Play with sound on to hear the calming Tibetan bowl and chimes"
+        ]
+      },
+      mindfulness: {
+        title: "The Mindfulness Pauses",
+        content: "Every 5 lines, the game pauses for a breathing exercise. These aren't interruptions—they're the heart of the experience. You'll practice techniques like 4-7-8 breathing (inhale 4 seconds, hold 7, exhale 8), box breathing, body scans, and present-moment awareness. Each exercise takes about 30-60 seconds and leaves you feeling calmer and more focused."
+      }
+    },
+    benefits: {
+      title: "Benefits of Mindful Gaming - Why Play Zen Tetris",
+      metaDescription: "Discover the mental health benefits of playing Zen Tetris. From stress reduction to improved focus, learn how mindful gaming can enhance your wellbeing.",
+      heading: "Benefits of Mindful Gaming",
+      intro: "Playing Zen Tetris isn't just entertainment—it's a practice that can improve your mental wellbeing. Here's what regular play can offer:",
+      benefits: [
+        {
+          title: "Stress Reduction",
+          description: "The combination of focused gameplay and breathing exercises activates your parasympathetic nervous system, reducing cortisol levels and promoting relaxation."
+        },
+        {
+          title: "Anxiety Relief",
+          description: "Tetris has been studied for its ability to reduce intrusive thoughts. The spatial reasoning required occupies the visual processing centers of your brain, leaving less room for anxiety-producing rumination."
+        },
+        {
+          title: "Improved Focus",
+          description: "Regular mindfulness practice strengthens your ability to concentrate. The breathing exercises in Zen Tetris train your attention, making it easier to focus in daily life."
+        },
+        {
+          title: "Better Breathing Habits",
+          description: "Many people breathe shallowly without realizing it. The guided exercises teach techniques like diaphragmatic breathing that you can use anytime you feel stressed."
+        },
+        {
+          title: "Mindfulness Made Accessible",
+          description: "Traditional meditation can feel intimidating. Zen Tetris provides structure and engagement, making mindfulness approachable for beginners."
+        },
+        {
+          title: "Healthy Screen Time",
+          description: "Transform passive scrolling into active wellness. Zen Tetris gives you the benefits of a game break while building skills that improve your mental health."
+        }
+      ],
+      cta: "Ready to experience mindful gaming?"
+    }
   },
 
   exercises: [

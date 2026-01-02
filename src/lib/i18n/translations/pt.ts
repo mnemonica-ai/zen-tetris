@@ -86,6 +86,103 @@ export const pt: Translations = {
     ],
     languageTitle: "Idioma",
     close: "Fechar",
+    links: {
+      about: "Sobre",
+      howToPlay: "Como jogar",
+      benefits: "Benefícios",
+      backToGame: "Voltar ao jogo",
+    },
+  },
+
+  pages: {
+    about: {
+      title: "Sobre Zen Tetris - Experiência de jogo consciente",
+      metaDescription: "Conheça Zen Tetris, um jogo de quebra-cabeça único que combina a jogabilidade clássica de Tetris com exercícios de mindfulness para alívio do estresse e bem-estar mental.",
+      heading: "Sobre Zen Tetris",
+      sections: {
+        what: {
+          title: "O que é Zen Tetris?",
+          content: "Zen Tetris reimagina o clássico jogo de quebra-cabeça como uma ferramenta de mindfulness e relaxamento. Em vez de perseguir pontuações altas sob pressão, você joga em um ritmo constante e tranquilo. A cada poucas linhas, o jogo pausa para exercícios de respiração guiados, ajudando você a desenvolver uma prática de parar, respirar e se reconectar com o momento presente."
+        },
+        why: {
+          title: "Por que o jogo consciente?",
+          content: "Em nosso mundo sempre conectado, encontrar momentos de calma pode ser difícil. Zen Tetris preenche a lacuna entre entretenimento e bem-estar transformando o tempo de tela em uma oportunidade para aliviar o estresse. A mecânica familiar de Tetris fornece engajamento suficiente para acalmar pensamentos acelerados, enquanto os exercícios de respiração integrados ensinam técnicas valiosas de relaxamento."
+        },
+        how: {
+          title: "Como funciona",
+          content: "O jogo apresenta uma paleta de cores terrosas relaxante e peças que se dissolvem como areia quando linhas são completadas. Não há aceleração de velocidade—o ritmo permanece suave durante todo o jogo. A cada 5 linhas, você é guiado através de um exercício de respiração como a respiração 4-7-8, respiração quadrada ou escaneamentos corporais. Uma tigela tibetana marca o início da sua prática."
+        },
+        who: {
+          title: "Para quem é?",
+          content: "Zen Tetris é para qualquer pessoa que busca uma pausa consciente: aqueles lidando com ansiedade, pessoas aprendendo meditação, trabalhadores precisando de um reset mental, ou qualquer um que queira transformar jogos em uma prática de bem-estar. Nenhuma experiência com meditação é necessária—o jogo guia você através de cada exercício."
+        }
+      }
+    },
+    howToPlay: {
+      title: "Como jogar Zen Tetris - Controles e guia",
+      metaDescription: "Aprenda a jogar Zen Tetris com nosso guia completo. Domine os controles, entenda os exercícios de mindfulness e descubra dicas para uma experiência relaxante.",
+      heading: "Como jogar",
+      intro: "Zen Tetris segue as regras clássicas de Tetris com um toque consciente. Organize as peças que caem para completar linhas horizontais, mas lembre-se—o objetivo não é velocidade, é presença.",
+      controls: {
+        title: "Controles",
+        items: [
+          { key: "← →", action: "Mover peça para esquerda ou direita" },
+          { key: "↑", action: "Girar peça" },
+          { key: "↓", action: "Queda suave (descer mais rápido)" },
+          { key: "Espaço", action: "Queda rápida (queda instantânea)" },
+          { key: "C", action: "Guardar peça para depois" },
+          { key: "P", action: "Pausar o jogo" }
+        ]
+      },
+      tips: {
+        title: "Dicas para uma experiência consciente",
+        items: [
+          "Não se apresse—não há aumento de velocidade no Zen Tetris",
+          "Use a peça fantasma (prévia transparente) para planejar sua colocação",
+          "A função Reserva permite guardar uma peça para quando precisar",
+          "Durante os exercícios de respiração, realmente siga as instruções—eles são projetados para ajudar",
+          "Se você se sentir estressado, pause o jogo e respire fundo algumas vezes",
+          "Jogue com som para ouvir a tigela tibetana relaxante e os sinos"
+        ]
+      },
+      mindfulness: {
+        title: "As pausas de mindfulness",
+        content: "A cada 5 linhas, o jogo pausa para um exercício de respiração. Estas não são interrupções—são o coração da experiência. Você praticará técnicas como a respiração 4-7-8 (inspire 4 segundos, segure 7, expire 8), respiração quadrada, escaneamentos corporais e consciência do momento presente. Cada exercício leva aproximadamente 30-60 segundos e deixa você mais calmo e focado."
+      }
+    },
+    benefits: {
+      title: "Benefícios do jogo consciente - Por que jogar Zen Tetris",
+      metaDescription: "Descubra os benefícios para a saúde mental de jogar Zen Tetris. Da redução do estresse ao melhor foco, aprenda como o jogo consciente pode melhorar seu bem-estar.",
+      heading: "Benefícios do jogo consciente",
+      intro: "Jogar Zen Tetris não é apenas entretenimento—é uma prática que pode melhorar seu bem-estar mental. Aqui está o que o jogo regular pode oferecer:",
+      benefits: [
+        {
+          title: "Redução do estresse",
+          description: "A combinação de jogabilidade focada e exercícios de respiração ativa seu sistema nervoso parassimpático, reduzindo os níveis de cortisol e promovendo relaxamento."
+        },
+        {
+          title: "Alívio da ansiedade",
+          description: "Tetris foi estudado por sua capacidade de reduzir pensamentos intrusivos. O raciocínio espacial necessário ocupa os centros de processamento visual do seu cérebro, deixando menos espaço para ruminação que produz ansiedade."
+        },
+        {
+          title: "Melhor foco",
+          description: "A prática regular de mindfulness fortalece sua capacidade de concentração. Os exercícios de respiração no Zen Tetris treinam sua atenção, facilitando o foco na vida diária."
+        },
+        {
+          title: "Melhores hábitos de respiração",
+          description: "Muitas pessoas respiram superficialmente sem perceber. Os exercícios guiados ensinam técnicas como respiração diafragmática que você pode usar sempre que se sentir estressado."
+        },
+        {
+          title: "Mindfulness acessível",
+          description: "A meditação tradicional pode parecer intimidante. Zen Tetris oferece estrutura e engajamento, tornando o mindfulness acessível para iniciantes."
+        },
+        {
+          title: "Tempo de tela saudável",
+          description: "Transforme a rolagem passiva em bem-estar ativo. Zen Tetris oferece os benefícios de uma pausa de jogo enquanto desenvolve habilidades que melhoram sua saúde mental."
+        }
+      ],
+      cta: "Pronto para experimentar o jogo consciente?"
+    }
   },
 
   exercises: [

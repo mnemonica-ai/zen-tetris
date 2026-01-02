@@ -75,5 +75,55 @@ export interface Translations {
     aboutText: string[];
     languageTitle: string;
     close: string;
+    links: {
+      about: string;
+      howToPlay: string;
+      benefits: string;
+      backToGame: string;
+    };
+  };
+
+  // Pages
+  pages: {
+    about: {
+      title: string;
+      metaDescription: string;
+      heading: string;
+      sections: {
+        what: { title: string; content: string };
+        why: { title: string; content: string };
+        how: { title: string; content: string };
+        who: { title: string; content: string };
+      };
+    };
+    howToPlay: {
+      title: string;
+      metaDescription: string;
+      heading: string;
+      intro: string;
+      controls: {
+        title: string;
+        items: { key: string; action: string }[];
+      };
+      tips: {
+        title: string;
+        items: string[];
+      };
+      mindfulness: {
+        title: string;
+        content: string;
+      };
+    };
+    benefits: {
+      title: string;
+      metaDescription: string;
+      heading: string;
+      intro: string;
+      benefits: {
+        title: string;
+        description: string;
+      }[];
+      cta: string;
+    };
   };
 }

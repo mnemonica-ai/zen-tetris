@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 import AdBanner from './AdBanner';
 
@@ -70,6 +71,42 @@ export default function GameMenu({ playerName, onOpen, onClose }: GameMenuProps)
                 ))}
               </div>
             </div>
+
+            {/* Divider */}
+            <div className="w-16 h-px bg-[#c9a86c]/30 mx-auto my-8" />
+
+            {/* Navigation Links */}
+            <nav className="mb-8">
+              <ul className="space-y-3">
+                <li>
+                  <Link
+                    href="/about"
+                    className="block text-center text-[#8b7355] hover:text-[#c9a86c] transition-colors py-2"
+                    onClick={handleClose}
+                  >
+                    {t.menu.links.about}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/how-to-play"
+                    className="block text-center text-[#8b7355] hover:text-[#c9a86c] transition-colors py-2"
+                    onClick={handleClose}
+                  >
+                    {t.menu.links.howToPlay}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/benefits"
+                    className="block text-center text-[#8b7355] hover:text-[#c9a86c] transition-colors py-2"
+                    onClick={handleClose}
+                  >
+                    {t.menu.links.benefits}
+                  </Link>
+                </li>
+              </ul>
+            </nav>
 
             {/* Divider */}
             <div className="w-16 h-px bg-[#c9a86c]/30 mx-auto my-8" />
