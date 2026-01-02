@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import LanguageSelector from './LanguageSelector';
 import { trackPlayerNameSet, trackGameStart } from '@/lib/analytics';
+import AdBanner from './AdBanner';
 
 const PLAYER_NAME_KEY = 'zenTetrisPlayerName';
 
@@ -129,6 +130,11 @@ export default function StartScreen({ onStart }: StartScreenProps) {
         <p className="mt-8 text-sm text-[#6b5d4d]">
           {t.startScreen.breatheHint}
         </p>
+
+        {/* Ad Banner */}
+        <div className="mt-8 w-full max-w-md">
+          <AdBanner slot="2557954886" format="horizontal" />
+        </div>
       </div>
     </div>
   );
