@@ -978,7 +978,7 @@ const handlePauseToggle = useCallback(() => {
       ref={gameContainerRef}
       tabIndex={0}
       onClick={() => !isEditingName && gameContainerRef.current?.focus()}
-      className="min-h-screen bg-gradient-to-b from-[#1a1510] via-[#2d2418] to-[#1a1510] flex flex-col items-center outline-none p-2 pt-20 pb-48 md:pb-8 md:pt-8 md:overflow-y-auto"
+      className="game-container min-h-screen bg-gradient-to-b from-[#1a1510] via-[#2d2418] to-[#1a1510] flex flex-col items-center outline-none p-2 pt-20 pb-48 md:pb-8 md:pt-8 md:overflow-y-auto"
     >
       {/* Header Ad - Desktop only */}
       <div className="hidden lg:block w-full max-w-4xl mb-4">

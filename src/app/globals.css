@@ -19,11 +19,12 @@ body {
   overscroll-behavior: none;
 }
 
-/* Mobile: prevent scroll for touch controls */
+/* Mobile: prevent scroll for touch controls - only on game page */
 @media (max-width: 767px) {
-  html, body {
+  .game-container {
     overflow: hidden;
-    height: 100%;
+    height: 100vh;
+    height: 100dvh;
     -webkit-overflow-scrolling: none;
   }
 }
