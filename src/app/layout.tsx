@@ -93,6 +93,7 @@ export const metadata: Metadata = {
     "format-detection": "telephone=no",
     "msapplication-TileColor": "#1a1510",
     "msapplication-tap-highlight": "no",
+    "google-adsense-account": "ca-pub-1422077668654301",
   },
 };
 
