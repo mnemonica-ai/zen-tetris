@@ -1,22 +1,22 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { Piece, PieceType, SandParticle } from '@/types/game';
+import { Piece, PieceType, SandParticle, HighScore } from '@/types/game';
 import {
   COLS, ROWS, BLOCK_SIZE, PREVIEW_BLOCK_SIZE, DROP_INTERVAL,
   SHAPES, COLORS, LINES_BETWEEN_EXERCISES
 } from '@/lib/constants';
 import { playTibetanBowl, playSoftChime } from '@/lib/audio';
-import { saveHighScore } from '@/lib/storage';
+import { saveHighScore, getHighScores } from '@/lib/storage';
 import { useLanguage } from '@/context/LanguageContext';
-import { 
-  trackGameOver, 
-  trackLinesCleared, 
-  trackPlayerNameChange, 
-  trackMindfulnessStart, 
+import {
+  trackGameOver,
+  trackLinesCleared,
+  trackPlayerNameChange,
+  trackMindfulnessStart,
   trackMindfulnessComplete,
   trackHoldPiece,
-  trackPauseGame 
+  trackPauseGame
 } from '@/lib/analytics';
 import { useTouchControls } from '@/hooks/useTouchControls';
 import MobileControls from './MobileControls';
@@ -44,6 +44,7 @@ export default function ZenTetris() {
   const [linesSinceExercise, setLinesSinceExercise] = useState(0);
   const [zenMessage, setZenMessage] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+  const [highScores, setHighScores] = useState<HighScore[]>([]);
   const [, forceUpdate] = useState(0);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -437,10 +438,10 @@ export default function ZenTetris() {
 
         if (p.isChunk) {
           ctx.beginPath();
-          ctx.moveTo(-p.size/2, -p.size/3);
-          ctx.lineTo(p.size/3, -p.size/2);
-          ctx.lineTo(p.size/2, p.size/4);
-          ctx.lineTo(-p.size/4, p.size/2);
+          ctx.moveTo(-p.size / 2, -p.size / 3);
+          ctx.lineTo(p.size / 3, -p.size / 2);
+          ctx.lineTo(p.size / 2, p.size / 4);
+          ctx.lineTo(-p.size / 4, p.size / 2);
           ctx.closePath();
           ctx.fill();
         } else if (p.isDust) {
@@ -520,7 +521,7 @@ export default function ZenTetris() {
   // Check for complete lines and clear them (handles chain reactions)
   const checkAndClearLines = () => {
     const game = gameRef.current;
-    
+
     const toClear: number[] = [];
     for (let row = ROWS - 1; row >= 0; row--) {
       if (game.board[row] && game.board[row].every(cell => cell !== 0)) {
@@ -614,6 +615,7 @@ export default function ZenTetris() {
     setZenMessage(interpolate(messageTemplate, { name: playerName }));
 
     saveHighScore({ name: playerName, score: game.score, level: game.level, lines: game.lines });
+    setHighScores(getHighScores());
     trackGameOver(game.score, game.level, game.lines, playerName);
   };
 
@@ -678,13 +680,13 @@ export default function ZenTetris() {
   const handleNameClick = () => {
     const game = gameRef.current;
     if (game.showExercise || game.isAnimating) return;
-    
+
     // Pausar el juego si está activo
     if (!game.isPaused && !game.gameOver) {
       game.isPaused = true;
       setIsPaused(true);
     }
-    
+
     setEditedName(playerName);
     setIsEditingName(true);
     isEditingNameRef.current = true;
@@ -778,7 +780,7 @@ export default function ZenTetris() {
     const game = gameRef.current;
     const piece = game.currentPiece;
     if (!piece || game.isPaused || game.gameOver || game.showExercise) return;
-    
+
     const shape = piece.shape;
     const n = shape.length;
     const rotated: number[][] = [];
@@ -803,7 +805,7 @@ export default function ZenTetris() {
     const game = gameRef.current;
     const piece = game.currentPiece;
     if (!piece || game.isPaused || game.gameOver || game.showExercise) return;
-    
+
     let dropDistance = 0;
     while (!checkCollision(piece, 0, 1)) {
       piece.y++;
@@ -814,7 +816,7 @@ export default function ZenTetris() {
     lockPiece();
   }, []);
 
-const handleHold = useCallback(() => {
+  const handleHold = useCallback(() => {
     const game = gameRef.current;
     const piece = game.currentPiece;
     if (!piece || game.isPaused || game.gameOver || game.showExercise || !game.canHold) return;
@@ -833,7 +835,7 @@ const handleHold = useCallback(() => {
     forceUpdate(n => n + 1);
   }, []);
 
-const handlePauseToggle = useCallback(() => {
+  const handlePauseToggle = useCallback(() => {
     const game = gameRef.current;
     if (game.gameOver) return;
 
@@ -1000,153 +1002,168 @@ const handlePauseToggle = useCallback(() => {
         </div>
 
         <div className="flex flex-col md:flex-row gap-3 md:gap-5 p-3 md:p-5 bg-[#2d2418]/50 border border-[#c9a86c]/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)] max-w-full">
-        
-        {/* Mobile Top Bar */}
-        <div className="flex md:hidden justify-between items-center gap-2 w-full">
-          {/* Hold piece - compact */}
-          <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex items-center gap-2">
-            <canvas ref={holdCanvasMobileRef} width={60} height={60} className="block bg-[#1a1510]/80 border border-[#c9a86c]/10 w-[50px] h-[50px]" />
-          </div>
-          
-          {/* Score/Level - compact */}
-          <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex-1 text-center">
-            <div className="flex justify-center gap-4 text-sm">
-              <span className="text-[#c9a86c]">{score}</span>
-              <span className="text-[#6b5d4d]">|</span>
-              <span className="text-[#8b7355]">L{level}</span>
+
+          {/* Mobile Top Bar */}
+          <div className="flex md:hidden justify-between items-center gap-2 w-full">
+            {/* Hold piece - compact */}
+            <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex items-center gap-2">
+              <canvas ref={holdCanvasMobileRef} width={60} height={60} className="block bg-[#1a1510]/80 border border-[#c9a86c]/10 w-[50px] h-[50px]" />
+            </div>
+
+            {/* Score/Level - compact */}
+            <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex-1 text-center">
+              <div className="flex justify-center gap-4 text-sm">
+                <span className="text-[#c9a86c]">{score}</span>
+                <span className="text-[#6b5d4d]">|</span>
+                <span className="text-[#8b7355]">L{level}</span>
+              </div>
+            </div>
+
+            {/* Next piece - compact */}
+            <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex items-center gap-2">
+              <canvas ref={nextCanvasMobileRef} width={60} height={60} className="block bg-[#1a1510]/80 border border-[#c9a86c]/10 w-[50px] h-[50px]" />
             </div>
           </div>
-          
-          {/* Next piece - compact */}
-          <div className="bg-[#1a1510]/60 p-2 border border-[#c9a86c]/15 flex items-center gap-2">
-            <canvas ref={nextCanvasMobileRef} width={60} height={60} className="block bg-[#1a1510]/80 border border-[#c9a86c]/10 w-[50px] h-[50px]" />
-          </div>
-        </div>
 
-        {/* Desktop Left Panel */}
-        <div className="hidden md:flex w-40 flex-col gap-5">
-          {/* Player Name */}
-          <div className="bg-[#1a1510]/60 p-3 border border-[#c9a86c]/15 text-center group">
-            {isEditingName ? (
-              <input
-                type="text"
-                value={editedName}
-                onChange={handleNameChange}
-                onBlur={handleNameSave}
-                onKeyDown={handleNameKeyDown}
-                maxLength={20}
-                autoFocus
-                className="bg-transparent border-0 border-b border-[#c9a86c]/50 text-[#c9a86c] text-sm text-center w-full outline-none focus:border-[#c9a86c]"
-              />
-            ) : (
-              <span
-                onClick={handleNameClick}
-                title={t.game.editNameTitle}
-                className="text-[#c9a86c] text-sm block cursor-pointer hover:text-[#e8d5b0] transition-colors"
-              >
-                {playerName}
-                <span className="block text-[10px] text-[#6b5d4d] opacity-0 group-hover:opacity-100 transition-opacity mt-1">
-                  {t.game.edit}
+          {/* Desktop Left Panel */}
+          <div className="hidden md:flex w-40 flex-col gap-5">
+            {/* Player Name */}
+            <div className="bg-[#1a1510]/60 p-3 border border-[#c9a86c]/15 text-center group">
+              {isEditingName ? (
+                <input
+                  type="text"
+                  value={editedName}
+                  onChange={handleNameChange}
+                  onBlur={handleNameSave}
+                  onKeyDown={handleNameKeyDown}
+                  maxLength={20}
+                  autoFocus
+                  className="bg-transparent border-0 border-b border-[#c9a86c]/50 text-[#c9a86c] text-sm text-center w-full outline-none focus:border-[#c9a86c]"
+                />
+              ) : (
+                <span
+                  onClick={handleNameClick}
+                  title={t.game.editNameTitle}
+                  className="text-[#c9a86c] text-sm block cursor-pointer hover:text-[#e8d5b0] transition-colors"
+                >
+                  {playerName}
+                  <span className="block text-[10px] text-[#6b5d4d] opacity-0 group-hover:opacity-100 transition-opacity mt-1">
+                    {t.game.edit}
+                  </span>
                 </span>
-              </span>
+              )}
+            </div>
+
+            <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15">
+              <h3 className="text-center text-xs tracking-[3px] mb-2 text-[#8b7355] font-normal">{t.game.hold}</h3>
+              <canvas ref={holdCanvasRef} width={100} height={100} className="block mx-auto bg-[#1a1510]/80 border border-[#c9a86c]/10" />
+              <p className="text-center text-[11px] text-[#5a4d3d] mt-2">{t.game.holdKey}</p>
+            </div>
+
+            <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15">
+              <div className="flex justify-between py-2 border-b border-[#c9a86c]/10">
+                <span className="text-[#8b7355] text-sm">{t.game.score}</span>
+                <span className="text-[#c9a86c] text-base">{score}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b border-[#c9a86c]/10">
+                <span className="text-[#8b7355] text-sm">{t.game.level}</span>
+                <span className="text-[#c9a86c] text-base">{level}</span>
+              </div>
+              <div className="flex justify-between py-2">
+                <span className="text-[#8b7355] text-sm">{t.game.lines}</span>
+                <span className="text-[#c9a86c] text-base">{lines}</span>
+              </div>
+            </div>
+
+            <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15 text-center">
+              <span className="block text-[#6b5d4d] text-[11px] mb-1">{t.game.nextBreak}</span>
+              <span className="text-[#c9a86c] text-sm">{LINES_BETWEEN_EXERCISES - linesSinceExercise} {t.game.linesUnit}</span>
+            </div>
+          </div>
+
+          {/* Game Board */}
+          <div className="relative mx-auto md:mx-0">
+            <canvas
+              ref={canvasRef}
+              width={300}
+              height={600}
+              className="block bg-gradient-to-b from-[#1a1510]/90 to-[#2d2418]/90 border-2 border-[#c9a86c]/30 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] max-h-[50vh] md:max-h-none w-auto touch-none"
+              style={{ aspectRatio: '1/2' }}
+            />
+
+            {gameOver && (
+              <div className="absolute inset-0 bg-[#1a1510]/90 flex flex-col justify-center items-center backdrop-blur-sm overflow-y-auto py-4">
+                <h2 className="text-3xl text-[#c9a86c] mb-5 tracking-[3px] font-light">{t.game.gameOverTitle}</h2>
+                <p className="text-base mb-4 text-[#8b7355]">{t.game.gameOverScore}: {score}</p>
+                <p className="italic max-w-[250px] text-center leading-relaxed my-5 text-[#8b7355]">{zenMessage}</p>
+
+                {/* Leaderboard */}
+                {highScores.length > 0 && (
+                  <div className="w-full max-w-[280px] mb-4 bg-[#1a1510]/50 border border-[#c9a86c]/20 p-4 rounded-sm">
+                    <h3 className="text-[#c9a86c] text-sm tracking-[2px] mb-3 text-center border-b border-[#c9a86c]/20 pb-2 uppercase text-xs">Top Zen Masters</h3>
+                    <div className="flex flex-col gap-2">
+                      {highScores.map((entry, index) => (
+                        <div key={`${entry.name}-${index}`} className={`flex justify-between text-xs ${entry.name === playerName && entry.score === score ? 'text-[#e8d5b0] font-bold bg-[#c9a86c]/10 -mx-2 px-2 py-1 rounded' : 'text-[#8b7355]'}`}>
+                          <span className="truncate max-w-[120px]">{index + 1}. {entry.name}</span>
+                          <span>{entry.score}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <button
+                  onClick={resetGame}
+                  className="mt-5 bg-transparent border-2 border-[#c9a86c] text-[#c9a86c] py-3 px-8 text-sm tracking-[3px] cursor-pointer transition-all hover:bg-[#c9a86c] hover:text-[#1a1510]"
+                >
+                  {t.game.continueButton}
+                </button>
+                {/* Ad in Game Over */}
+                <div className="mt-6 w-full max-w-[250px]">
+                  <AdBanner slot="9677897006" format="rectangle" />
+                </div>
+              </div>
+            )}
+
+            {isPaused && !gameOver && (
+              <div className="absolute inset-0 bg-[#1a1510]/90 flex flex-col justify-center items-center backdrop-blur-sm">
+                <h2 className="text-3xl text-[#c9a86c] mb-5 tracking-[3px] font-light">{t.game.pauseTitle}</h2>
+                <p className="text-base text-[#8b7355]">{t.game.pauseMessage}</p>
+                <p className="text-[11px] text-[#5a4d3d] mt-4">{t.game.pauseHint}</p>
+              </div>
             )}
           </div>
 
-          <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15">
-            <h3 className="text-center text-xs tracking-[3px] mb-2 text-[#8b7355] font-normal">{t.game.hold}</h3>
-            <canvas ref={holdCanvasRef} width={100} height={100} className="block mx-auto bg-[#1a1510]/80 border border-[#c9a86c]/10" />
-            <p className="text-center text-[11px] text-[#5a4d3d] mt-2">{t.game.holdKey}</p>
-          </div>
+          {/* Desktop Right Panel */}
+          <div className="hidden md:flex w-40 flex-col gap-5">
+            <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15">
+              <h3 className="text-center text-xs tracking-[3px] mb-2 text-[#8b7355] font-normal">{t.game.next}</h3>
+              <canvas ref={nextCanvasRef} width={100} height={100} className="block mx-auto bg-[#1a1510]/80 border border-[#c9a86c]/10" />
+            </div>
 
-          <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15">
-            <div className="flex justify-between py-2 border-b border-[#c9a86c]/10">
-              <span className="text-[#8b7355] text-sm">{t.game.score}</span>
-              <span className="text-[#c9a86c] text-base">{score}</span>
+            <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15">
+              <h3 className="text-center text-xs tracking-[3px] mb-2 text-[#8b7355] font-normal">{t.game.controls}</h3>
+              <ul className="text-xs">
+                {[
+                  ['←→', t.game.controlSlide],
+                  ['↑', t.game.controlRotate],
+                  ['↓', t.game.controlDown],
+                  ['Space', t.game.controlDrop],
+                  ['C', t.game.controlHold],
+                  ['P', t.game.controlPause]
+                ].map(([key, action]) => (
+                  <li key={key} className="flex justify-between py-1 text-[#6b5d4d]">
+                    <span className="bg-[#c9a86c]/10 px-2 py-0.5 text-[11px] text-[#8b7355]">{key}</span>
+                    <span>{action}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="flex justify-between py-2 border-b border-[#c9a86c]/10">
-              <span className="text-[#8b7355] text-sm">{t.game.level}</span>
-              <span className="text-[#c9a86c] text-base">{level}</span>
-            </div>
-            <div className="flex justify-between py-2">
-              <span className="text-[#8b7355] text-sm">{t.game.lines}</span>
-              <span className="text-[#c9a86c] text-base">{lines}</span>
-            </div>
-          </div>
 
-          <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15 text-center">
-            <span className="block text-[#6b5d4d] text-[11px] mb-1">{t.game.nextBreak}</span>
-            <span className="text-[#c9a86c] text-sm">{LINES_BETWEEN_EXERCISES - linesSinceExercise} {t.game.linesUnit}</span>
+            <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15 italic text-center">
+              <p className="text-xs text-[#8b7355] leading-relaxed">{zenQuote}</p>
+            </div>
           </div>
         </div>
-
-        {/* Game Board */}
-        <div className="relative mx-auto md:mx-0">
-          <canvas
-            ref={canvasRef}
-            width={300}
-            height={600}
-            className="block bg-gradient-to-b from-[#1a1510]/90 to-[#2d2418]/90 border-2 border-[#c9a86c]/30 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] max-h-[50vh] md:max-h-none w-auto touch-none"
-            style={{ aspectRatio: '1/2' }}
-          />
-
-          {gameOver && (
-            <div className="absolute inset-0 bg-[#1a1510]/90 flex flex-col justify-center items-center backdrop-blur-sm overflow-y-auto py-4">
-              <h2 className="text-3xl text-[#c9a86c] mb-5 tracking-[3px] font-light">{t.game.gameOverTitle}</h2>
-              <p className="text-base mb-4 text-[#8b7355]">{t.game.gameOverScore}: {score}</p>
-              <p className="italic max-w-[250px] text-center leading-relaxed my-5 text-[#8b7355]">{zenMessage}</p>
-              <button
-                onClick={resetGame}
-                className="mt-5 bg-transparent border-2 border-[#c9a86c] text-[#c9a86c] py-3 px-8 text-sm tracking-[3px] cursor-pointer transition-all hover:bg-[#c9a86c] hover:text-[#1a1510]"
-              >
-                {t.game.continueButton}
-              </button>
-              {/* Ad in Game Over */}
-              <div className="mt-6 w-full max-w-[250px]">
-                <AdBanner slot="9677897006" format="rectangle" />
-              </div>
-            </div>
-          )}
-
-          {isPaused && !gameOver && (
-            <div className="absolute inset-0 bg-[#1a1510]/90 flex flex-col justify-center items-center backdrop-blur-sm">
-              <h2 className="text-3xl text-[#c9a86c] mb-5 tracking-[3px] font-light">{t.game.pauseTitle}</h2>
-              <p className="text-base text-[#8b7355]">{t.game.pauseMessage}</p>
-              <p className="text-[11px] text-[#5a4d3d] mt-4">{t.game.pauseHint}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Desktop Right Panel */}
-        <div className="hidden md:flex w-40 flex-col gap-5">
-          <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15">
-            <h3 className="text-center text-xs tracking-[3px] mb-2 text-[#8b7355] font-normal">{t.game.next}</h3>
-            <canvas ref={nextCanvasRef} width={100} height={100} className="block mx-auto bg-[#1a1510]/80 border border-[#c9a86c]/10" />
-          </div>
-
-          <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15">
-            <h3 className="text-center text-xs tracking-[3px] mb-2 text-[#8b7355] font-normal">{t.game.controls}</h3>
-            <ul className="text-xs">
-              {[
-                ['←→', t.game.controlSlide],
-                ['↑', t.game.controlRotate],
-                ['↓', t.game.controlDown],
-                ['Space', t.game.controlDrop],
-                ['C', t.game.controlHold],
-                ['P', t.game.controlPause]
-              ].map(([key, action]) => (
-                <li key={key} className="flex justify-between py-1 text-[#6b5d4d]">
-                  <span className="bg-[#c9a86c]/10 px-2 py-0.5 text-[11px] text-[#8b7355]">{key}</span>
-                  <span>{action}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15 italic text-center">
-            <p className="text-xs text-[#8b7355] leading-relaxed">{zenQuote}</p>
-          </div>
-        </div>
-      </div>
 
         {/* Right Ad - Desktop only */}
         <div className="hidden xl:block w-[160px] sticky top-4">
