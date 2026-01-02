@@ -3,6 +3,7 @@ import "./globals.css";
 import { Providers } from "@/components/Providers";
 import SupportWidget from "@/components/SupportWidget";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import GoogleAdsense from "@/components/GoogleAdsense";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://zentetris.com";
 
@@ -155,6 +156,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <GoogleAnalytics />
+        <GoogleAdsense />
         <Providers>
           {children}
         </Providers>
