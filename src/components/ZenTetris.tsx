@@ -20,6 +20,7 @@ import {
 } from '@/lib/analytics';
 import { useTouchControls } from '@/hooks/useTouchControls';
 import MobileControls from './MobileControls';
+import AdBanner from './AdBanner';
 
 const PLAYER_NAME_KEY = 'zenTetrisPlayerName';
 import StartScreen from './StartScreen';
@@ -977,8 +978,13 @@ const handlePauseToggle = useCallback(() => {
       ref={gameContainerRef}
       tabIndex={0}
       onClick={() => !isEditingName && gameContainerRef.current?.focus()}
-      className="min-h-screen bg-gradient-to-b from-[#1a1510] via-[#2d2418] to-[#1a1510] flex justify-center items-start md:items-center outline-none p-2 pt-20 pb-48 md:pb-4 md:pt-4"
+      className="min-h-screen bg-gradient-to-b from-[#1a1510] via-[#2d2418] to-[#1a1510] flex flex-col items-center outline-none p-2 pt-20 pb-48 md:pb-4 md:pt-4"
     >
+      {/* Header Ad - Desktop only */}
+      <div className="hidden lg:block w-full max-w-4xl mb-4">
+        <AdBanner slot="2557954886" format="horizontal" />
+      </div>
+
       {showExercise && (
         <MindfulnessOverlay
           playerName={playerName}
@@ -987,7 +993,13 @@ const handlePauseToggle = useCallback(() => {
         />
       )}
 
-      <div className="flex flex-col md:flex-row gap-3 md:gap-5 p-3 md:p-5 bg-[#2d2418]/50 border border-[#c9a86c]/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)] max-w-full">
+      <div className="flex items-start gap-4">
+        {/* Left Ad - Desktop only */}
+        <div className="hidden xl:block w-[160px] sticky top-4">
+          <AdBanner slot="9905961861" format="vertical" />
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-3 md:gap-5 p-3 md:p-5 bg-[#2d2418]/50 border border-[#c9a86c]/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)] max-w-full">
         
         {/* Mobile Top Bar */}
         <div className="flex md:hidden justify-between items-center gap-2 w-full">
@@ -1078,7 +1090,7 @@ const handlePauseToggle = useCallback(() => {
           />
 
           {gameOver && (
-            <div className="absolute inset-0 bg-[#1a1510]/90 flex flex-col justify-center items-center backdrop-blur-sm">
+            <div className="absolute inset-0 bg-[#1a1510]/90 flex flex-col justify-center items-center backdrop-blur-sm overflow-y-auto py-4">
               <h2 className="text-3xl text-[#c9a86c] mb-5 tracking-[3px] font-light">{t.game.gameOverTitle}</h2>
               <p className="text-base mb-4 text-[#8b7355]">{t.game.gameOverScore}: {score}</p>
               <p className="italic max-w-[250px] text-center leading-relaxed my-5 text-[#8b7355]">{zenMessage}</p>
@@ -1088,6 +1100,10 @@ const handlePauseToggle = useCallback(() => {
               >
                 {t.game.continueButton}
               </button>
+              {/* Ad in Game Over */}
+              <div className="mt-6 w-full max-w-[250px]">
+                <AdBanner slot="9677897006" format="rectangle" />
+              </div>
             </div>
           )}
 
@@ -1129,6 +1145,12 @@ const handlePauseToggle = useCallback(() => {
           <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15 italic text-center">
             <p className="text-xs text-[#8b7355] leading-relaxed">{zenQuote}</p>
           </div>
+        </div>
+      </div>
+
+        {/* Right Ad - Desktop only */}
+        <div className="hidden xl:block w-[160px] sticky top-4">
+          <AdBanner slot="6964087842" format="vertical" />
         </div>
       </div>
 
