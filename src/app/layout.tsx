@@ -61,18 +61,36 @@ export const metadata: Metadata = {
     siteName: "Zen Tetris",
     title: "Zen Tetris - Mindful Puzzle Game for Relaxation",
     description: "A calming puzzle game that combines classic Tetris with mindfulness breathing exercises. Find peace while you play.",
-    // Images are auto-detected from src/app/opengraph-image.svg
+    images: [
+      {
+        url: "/opengraph-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Zen Tetris - Mindful Puzzle Game",
+      },
+    ],
   },
-  
-  // Twitter - images auto-detected from opengraph-image.svg
+
+  // Twitter
   twitter: {
     card: "summary_large_image",
     title: "Zen Tetris - Mindful Puzzle Game",
     description: "A calming puzzle game with breathing exercises. Reduce stress and find your moment of peace.",
     creator: "@mnemonica_ai",
+    images: ["/opengraph-image.jpg"],
   },
-  
-  // Icons are auto-detected from src/app/icon.svg and src/app/apple-icon.svg
+
+  // Icons
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico", sizes: "48x48" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   
   // Manifest
   manifest: "/manifest.json",
@@ -129,7 +147,7 @@ export default function RootLayout({
               name: "Zen Tetris",
               description: "A calming puzzle game that combines classic Tetris gameplay with mindfulness breathing exercises.",
               url: siteUrl,
-              image: `${siteUrl}/opengraph-image.svg`,
+              image: `${siteUrl}/opengraph-image.jpg`,
               author: {
                 "@type": "Organization",
                 name: "Mnemonica AI",
