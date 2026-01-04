@@ -80,6 +80,15 @@ export default function GameMenu({ playerName, onOpen, onClose }: GameMenuProps)
               <ul className="space-y-3">
                 <li>
                   <Link
+                    href="/zen-invaders"
+                    className="block text-center text-[#c9a86c] hover:text-[#e0c896] transition-colors py-2 font-medium"
+                    onClick={handleClose}
+                  >
+                    {t.menu.links.zenInvaders}
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     href="/about"
                     className="block text-center text-[#8b7355] hover:text-[#c9a86c] transition-colors py-2"
                     onClick={handleClose}

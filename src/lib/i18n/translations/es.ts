@@ -91,6 +91,7 @@ export const es: Translations = {
       howToPlay: "Cómo jugar",
       benefits: "Beneficios",
       backToGame: "Volver al juego",
+      zenInvaders: "Zen Invaders",
     },
   },
 

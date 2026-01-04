@@ -80,6 +80,7 @@ export interface Translations {
       howToPlay: string;
       benefits: string;
       backToGame: string;
+      zenInvaders: string;
     };
   };
 
