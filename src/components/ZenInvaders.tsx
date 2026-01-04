@@ -414,33 +414,78 @@ export default function ZenInvaders() {
     }, [gameStarted]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
-            <div className="relative">
+        <div className="flex flex-col items-center justify-center min-h-screen p-2 sm:p-4">
+            <div className="relative w-full max-w-[600px]" style={{ aspectRatio: '3/4', maxHeight: '90vh' }}>
                 <canvas
                     ref={canvasRef}
                     width={CANVAS_WIDTH}
                     height={CANVAS_HEIGHT}
-                    className="bg-[#1a1510] border-2 border-[#c9a86c]/30 shadow-2xl rounded-sm max-w-[100vw] max-h-[90vh] touch-none"
-                    style={{ aspectRatio: '3/4' }}
+                    className="bg-[#1a1510] border-2 border-[#c9a86c]/30 shadow-2xl rounded-sm touch-none w-full h-full"
                 />
 
+                {/* Tap to Start/Restart Overlay */}
+                {(!gameStarted || gameOver) && !showExercise && (
+                    <div
+                        className="absolute inset-0 z-5 md:hidden"
+                        onTouchStart={(e) => {
+                            e.preventDefault();
+                            if (!gameStarted) {
+                                setGameStarted(true);
+                                initGame();
+                            } else if (gameOver) {
+                                initGame();
+                            }
+                        }}
+                    />
+                )}
+
                 {/* Mobile Controls Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 h-1/4 flex gap-4 p-4 opacity-50 md:hidden touch-none">
-                    <div
-                        className="flex-1 bg-white/5 rounded-lg active:bg-white/20"
-                        onTouchStart={(e) => { e.preventDefault(); gameState.current.moveLeft = true; }}
-                        onTouchEnd={(e) => { e.preventDefault(); gameState.current.moveLeft = false; }}
-                    />
-                    <div
-                        className="flex-1 bg-white/5 rounded-lg active:bg-white/20"
-                        onTouchStart={(e) => { e.preventDefault(); fireProjectile(); }}
-                    />
-                    <div
-                        className="flex-1 bg-white/5 rounded-lg active:bg-white/20"
-                        onTouchStart={(e) => { e.preventDefault(); gameState.current.moveRight = true; }}
-                        onTouchEnd={(e) => { e.preventDefault(); gameState.current.moveRight = false; }}
-                    />
-                </div>
+                {gameStarted && !gameOver && (
+                    <div className="absolute bottom-0 left-0 right-0 h-1/3 flex gap-2 p-3 md:hidden touch-none">
+                        <div
+                            className="flex-1 bg-white/10 rounded-lg active:bg-white/30 flex items-center justify-center border border-white/20"
+                            onTouchStart={(e) => { e.preventDefault(); gameState.current.moveLeft = true; }}
+                            onTouchEnd={(e) => { e.preventDefault(); gameState.current.moveLeft = false; }}
+                            onTouchCancel={(e) => { e.preventDefault(); gameState.current.moveLeft = false; }}
+                        >
+                            <span className="text-[#c9a86c]/60 text-3xl select-none">←</span>
+                        </div>
+                        <div
+                            className="flex-[1.5] bg-[#c9a86c]/20 rounded-lg active:bg-[#c9a86c]/40 flex items-center justify-center border border-[#c9a86c]/30"
+                            onTouchStart={(e) => {
+                                e.preventDefault();
+                                fireProjectile();
+                                // Disparo continuo mientras se mantiene presionado
+                                const interval = setInterval(() => {
+                                    if (!gameState.current.isGameOver) {
+                                        fireProjectile();
+                                    }
+                                }, 150);
+                                (e.target as HTMLElement).dataset.fireInterval = String(interval);
+                            }}
+                            onTouchEnd={(e) => {
+                                e.preventDefault();
+                                const interval = (e.target as HTMLElement).dataset.fireInterval;
+                                if (interval) clearInterval(Number(interval));
+                            }}
+                            onTouchCancel={(e) => {
+                                e.preventDefault();
+                                const interval = (e.target as HTMLElement).dataset.fireInterval;
+                                if (interval) clearInterval(Number(interval));
+                            }}
+                        >
+                            <span className="text-[#c9a86c]/80 text-2xl select-none tracking-widest">FIRE</span>
+                        </div>
+                        <div
+                            className="flex-1 bg-white/10 rounded-lg active:bg-white/30 flex items-center justify-center border border-white/20"
+                            onTouchStart={(e) => { e.preventDefault(); gameState.current.moveRight = true; }}
+                            onTouchEnd={(e) => { e.preventDefault(); gameState.current.moveRight = false; }}
+                            onTouchCancel={(e) => { e.preventDefault(); gameState.current.moveRight = false; }}
+                        >
+                            <span className="text-[#c9a86c]/60 text-3xl select-none">→</span>
+                        </div>
+                    </div>
+                )}
                 {showExercise && (
                     <div className="absolute inset-0 z-20">
                         <MindfulnessOverlay
@@ -476,8 +521,9 @@ export default function ZenInvaders() {
                 </div>
             </div>
 
-            <div className="mt-4 text-[#8b7355] text-sm hidden md:block">
-                Arrows to Move • Space to Focus
+            <div className="mt-4 text-[#8b7355] text-sm text-center">
+                <span className="hidden md:inline">Arrows to Move • Space to Focus</span>
+                <span className="md:hidden">Tap to Start • Use buttons below to play</span>
             </div>
         </div>
     );
