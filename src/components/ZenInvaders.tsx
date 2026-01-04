@@ -420,25 +420,25 @@ export default function ZenInvaders() {
                     ref={canvasRef}
                     width={CANVAS_WIDTH}
                     height={CANVAS_HEIGHT}
-                    className="bg-[#1a1510] border-2 border-[#c9a86c]/30 shadow-2xl rounded-sm max-w-[100vw] max-h-[90vh]"
+                    className="bg-[#1a1510] border-2 border-[#c9a86c]/30 shadow-2xl rounded-sm max-w-[100vw] max-h-[90vh] touch-none"
                     style={{ aspectRatio: '3/4' }}
                 />
 
                 {/* Mobile Controls Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 h-1/4 flex gap-4 p-4 opacity-50 md:hidden">
+                <div className="absolute bottom-0 left-0 right-0 h-1/4 flex gap-4 p-4 opacity-50 md:hidden touch-none">
                     <div
                         className="flex-1 bg-white/5 rounded-lg active:bg-white/20"
-                        onTouchStart={() => { gameState.current.moveLeft = true }}
-                        onTouchEnd={() => { gameState.current.moveLeft = false }}
+                        onTouchStart={(e) => { e.preventDefault(); gameState.current.moveLeft = true; }}
+                        onTouchEnd={(e) => { e.preventDefault(); gameState.current.moveLeft = false; }}
                     />
                     <div
                         className="flex-1 bg-white/5 rounded-lg active:bg-white/20"
-                        onTouchStart={() => { fireProjectile(); }}
+                        onTouchStart={(e) => { e.preventDefault(); fireProjectile(); }}
                     />
                     <div
                         className="flex-1 bg-white/5 rounded-lg active:bg-white/20"
-                        onTouchStart={() => { gameState.current.moveRight = true }}
-                        onTouchEnd={() => { gameState.current.moveRight = false }}
+                        onTouchStart={(e) => { e.preventDefault(); gameState.current.moveRight = true; }}
+                        onTouchEnd={(e) => { e.preventDefault(); gameState.current.moveRight = false; }}
                     />
                 </div>
                 {showExercise && (
