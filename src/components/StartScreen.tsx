@@ -32,11 +32,11 @@ export default function StartScreen({ onStart }: StartScreenProps) {
     if (!name.trim()) return;
     const trimmedName = name.trim();
     const isNewPlayer = !originalNameRef.current;
-    
+
     // Track player name
     trackPlayerNameSet(trimmedName, isNewPlayer);
     trackGameStart(trimmedName);
-    
+
     localStorage.setItem(PLAYER_NAME_KEY, trimmedName);
     onStart(trimmedName);
   };
@@ -122,14 +122,21 @@ export default function StartScreen({ onStart }: StartScreenProps) {
         >
           <span>{t.startScreen.startButton}</span>
           <svg className={`w-10 h-6 transition-transform ${canStart ? 'group-hover:scale-110' : ''}`} viewBox="0 0 100 60">
-            <ellipse cx="50" cy="45" rx="45" ry="15" fill="none" stroke="currentColor" strokeWidth="2"/>
-            <path d="M 5 45 Q 5 20, 50 15 Q 95 20, 95 45" fill="none" stroke="currentColor" strokeWidth="2"/>
+            <ellipse cx="50" cy="45" rx="45" ry="15" fill="none" stroke="currentColor" strokeWidth="2" />
+            <path d="M 5 45 Q 5 20, 50 15 Q 95 20, 95 45" fill="none" stroke="currentColor" strokeWidth="2" />
           </svg>
         </button>
 
         <p className="mt-8 text-sm text-[#6b5d4d]">
           {t.startScreen.breatheHint}
         </p>
+
+        {/* Game Mode Switch */}
+        <div className="mt-6">
+          <a href="/zen-invaders" className="text-xs text-[#8b7355] hover:text-[#c9a86c] transition-colors border-b border-transparent hover:border-[#c9a86c] pb-1">
+            Try Zen Invaders
+          </a>
+        </div>
 
         {/* Ad Banner */}
         <div className="mt-8 w-full max-w-md">

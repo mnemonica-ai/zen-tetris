@@ -555,17 +555,9 @@ export default function ZenTetris() {
       });
     } else {
       // No more lines to clear, proceed with game
-      if (game.linesSinceExercise >= LINES_BETWEEN_EXERCISES) {
-        game.linesSinceExercise = 0;
-        game.showExercise = true;
-        setLinesSinceExercise(0);
-        setShowExercise(true);
-        trackMindfulnessStart(exerciseIndex);
-      } else {
-        spawnPiece();
-        game.lastDropTime = performance.now();
-        requestAnimationFrame(gameLoop);
-      }
+      spawnPiece();
+      game.lastDropTime = performance.now();
+      requestAnimationFrame(gameLoop);
     }
   };
 
@@ -1076,8 +1068,8 @@ export default function ZenTetris() {
             </div>
 
             <div className="bg-[#1a1510]/60 p-4 border border-[#c9a86c]/15 text-center">
-              <span className="block text-[#6b5d4d] text-[11px] mb-1">{t.game.nextBreak}</span>
-              <span className="text-[#c9a86c] text-sm">{LINES_BETWEEN_EXERCISES - linesSinceExercise} {t.game.linesUnit}</span>
+              <span className="block text-[#6b5d4d] text-[11px] mb-1">{t.game.level}</span>
+              <span className="text-[#c9a86c] text-sm">{level}</span>
             </div>
           </div>
 
@@ -1090,6 +1082,13 @@ export default function ZenTetris() {
               className="block bg-gradient-to-b from-[#1a1510]/90 to-[#2d2418]/90 border-2 border-[#c9a86c]/30 shadow-[inset_0_0_50px_rgba(0,0,0,0.5)] max-h-[50vh] md:max-h-none w-auto touch-none"
               style={{ aspectRatio: '1/2' }}
             />
+
+            {/* Score Overlay (Zen Style) */}
+            {!gameOver && !isPaused && (
+              <div className="absolute top-4 right-4 text-[#c9a86c] text-xl font-light tracking-widest z-10 pointer-events-none drop-shadow-md">
+                {score}
+              </div>
+            )}
 
             {gameOver && (
               <div className="absolute inset-0 bg-[#1a1510]/90 flex flex-col justify-center items-center backdrop-blur-sm overflow-y-auto py-4">
@@ -1117,6 +1116,17 @@ export default function ZenTetris() {
                 >
                   {t.game.continueButton}
                 </button>
+
+                <button
+                  onClick={() => {
+                    gameRef.current.showExercise = true;
+                    setShowExercise(true);
+                    trackMindfulnessStart(exerciseIndex);
+                  }}
+                  className="mt-3 text-xs text-[#8b7355] hover:text-[#c9a86c] transition-colors tracking-widest uppercase border-b border-transparent hover:border-[#c9a86c] pb-1"
+                >
+                  Take a Breathing Break
+                </button>
                 {/* Ad in Game Over */}
                 <div className="mt-6 w-full max-w-[250px]">
                   <AdBanner slot="9677897006" format="rectangle" />
@@ -1127,8 +1137,25 @@ export default function ZenTetris() {
             {isPaused && !gameOver && (
               <div className="absolute inset-0 bg-[#1a1510]/90 flex flex-col justify-center items-center backdrop-blur-sm">
                 <h2 className="text-3xl text-[#c9a86c] mb-5 tracking-[3px] font-light">{t.game.pauseTitle}</h2>
-                <p className="text-base text-[#8b7355]">{t.game.pauseMessage}</p>
-                <p className="text-[11px] text-[#5a4d3d] mt-4">{t.game.pauseHint}</p>
+                <div className="flex flex-col gap-4 items-center">
+                  <button
+                    onClick={handlePauseToggle}
+                    className="bg-[#c9a86c] text-[#1a1510] py-2 px-8 rounded-sm hover:bg-[#e8d5b0] transition-colors font-medium tracking-wider"
+                  >
+                    RESUME
+                  </button>
+                  <button
+                    onClick={() => {
+                      gameRef.current.showExercise = true;
+                      setShowExercise(true);
+                      trackMindfulnessStart(exerciseIndex);
+                    }}
+                    className="text-[#c9a86c] border border-[#c9a86c]/30 py-2 px-6 rounded-sm hover:bg-[#c9a86c]/10 transition-colors text-sm tracking-widest uppercase"
+                  >
+                    Mindful Breath
+                  </button>
+                </div>
+                <p className="text-[11px] text-[#5a4d3d] mt-8">{t.game.pauseHint}</p>
               </div>
             )}
           </div>
